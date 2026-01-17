@@ -10,6 +10,10 @@ from init import init_net
 from base_code.base import load_test
 from utils.mk_data_loaders import mk_data_loaders_single_funcs
 from utils.workflow import workflows
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+warnings.filterwarnings("ignore")
 def main(test_dir_prefix,model_name,dataset_dir_path,wts_path,snp_number,dataset_in_memory=True, persistent_workers=True,
          gene_freq_file_path=None, label_data_id_field_name='participant_id', label_data_label_field_name='label',batch_size=32):
     print(f'time:{test_dir_prefix}')
@@ -36,10 +40,13 @@ def main(test_dir_prefix,model_name,dataset_dir_path,wts_path,snp_number,dataset
     #net.load_state_dict(best_model_wts)
     net.eval()
     if data_loaders.get('test', None):
+        print("##############Start test################")
         workflows['test'](device, net,data_loaders['test'],model_name,writer)
     else:
+        print("##############Start test 2################")
         workflows['test'](device, net, data_loaders['valid'],model_name,writer)
     if model_name=="SNPNet":
+        print("进入计算SNPshap")
         SNP_Shap_Value(net,data_loaders['train'], data_loaders['valid'], device,test_dir_prefix,valid=True)
 
 
@@ -64,4 +71,5 @@ if __name__ == '__main__':
           batch_size=args.batch_size,
           label_data_id_field_name=args.label_data_id_field_name, #学籍号  participant_id
           label_data_label_field_name=args.label_data_label_field_name)#图像和多模态high_myopia，遗传label
+
 
