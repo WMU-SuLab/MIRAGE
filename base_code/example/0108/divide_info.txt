@@ -1,0 +1,12 @@
+label data path: /pub/data/gss/MIRAGE/code/SuLabCohort/label/qc_one_eye_high_myopia_merge.csv
+gene data dir path: /pub/data/gss/MIRAGE/code/One-hot/SuLabCohort/summary_snp/trans_snp
+image data dir path: /pub/data/gss/MIRAGE/data/SuLabCohort/image/all_qc
+dataset divide dir path:/pub/data/gss/MIRAGE/code/SuLabCohort
+label_data_id_field_name:participant_id
+train ratio: 7
+valid ratio: 2
+test ratio: 1
+strategy: combination
+train num: 1394
+valid num: 398
+test num: 199
