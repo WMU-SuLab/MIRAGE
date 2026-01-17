@@ -1,5 +1,6 @@
 import torch
 import os
+import argparse
 from torch.utils.tensorboard import SummaryWriter
 from utils import setup_seed
 from shap_code.shap_value import SNP_Shap_Value
@@ -42,13 +43,25 @@ def main(test_dir_prefix,model_name,dataset_dir_path,wts_path,snp_number,dataset
         SNP_Shap_Value(net,data_loaders['train'], data_loaders['valid'], device,test_dir_prefix,valid=True)
 
 
+parser = argparse.ArgumentParser(description='MIRAGE test pipline')
+parser.add_argument('--test_dir_prefix', required=False,default=datetime_now_str(), help='Output folder for results')
+parser.add_argument('--model_name', required=False,default='SNPImageNet', help='Model selection among SNPImageNet, SNPNet and ImageNet (default: SNPImageNet)')
+parser.add_argument('--dataset_dir_path', required=True, help='Input folder of datasets')
+parser.add_argument('--wts_path', required=True,help='Trained Model path (See example in `MIRAGE\base_code\example\best_model_checkpoints.pth`)')
+parser.add_argument('--snp_number', required=False,default=100760,type=int,help='SNP number for training (default: 100760)')
+parser.add_argument('--batch_size',required=False,default=32,type=int, help='Batch size (default:32)')
+parser.add_argument('--label_data_id_field_name', required=False,default='participant_id' ,help='Column name of sample ID (default: participant_id)')
+parser.add_argument('--label_data_label_field_name', required=False, default='high_myopia',help='Column name of sample label (default: label)')
+
+args = parser.parse_args()
+
 if __name__ == '__main__':
-    main( test_dir_prefix=datetime_now_str(),
-          model_name='SNPImageNet',
-          dataset_dir_path=r"/pub/data/gaoss/New_Multi/code/SuLabCohort/20240918215106/",
-          wts_path=r"/pub/data/gaoss/New_Multi/code/work_dirs/records/checkpoints/20241219214429/best_model_checkpoints.pth" ,
-          snp_number=100760,   #75988,#295552 #296180 230608 179712
-          batch_size=32,
-          label_data_id_field_name="学籍号", #学籍号  participant_id
-          label_data_label_field_name='high_myopia')#图像和多模态high_myopia，遗传label
+    main( test_dir_prefix=args.test_dir_prefix,
+          model_name=args.model_name,
+          dataset_dir_path=args.dataset_dir_path,
+          wts_path=args.wts_path,
+          snp_number=args.snp_number,   #75988,#295552 #296180 230608 179712
+          batch_size=args.batch_size,
+          label_data_id_field_name=args.label_data_id_field_name, #学籍号  participant_id
+          label_data_label_field_name=args.label_data_label_field_name)#图像和多模态high_myopia，遗传label
 

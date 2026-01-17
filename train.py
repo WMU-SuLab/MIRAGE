@@ -1,5 +1,6 @@
 import copy
 import os
+import argparse
 import time
 import torch
 import tqdm
@@ -101,28 +102,41 @@ def main(
         workflows['test'](device, net, data_loaders['valid'],model_name,writer)
 
 
+parser = argparse.ArgumentParser(description='MIRAGE train pipline')
+parser.add_argument('--train_dir_prefix', required=False,default=datetime_now_str(), help='Output folder for results')
+parser.add_argument('--model_name', required=False,default='SNPImageNet', help='Model selection among SNPImageNet, SNPNet and ImageNet (default: SNPImageNet)')
+parser.add_argument('--dataset_dir_path', required=True, help='Input folder of datasets')
+parser.add_argument('--snp_number', required=False,default=None,type=int,help='SNP number for training (default: None)')
+parser.add_argument('--batch_size',required=False,default=32,type=int, help='Batch size (default:32)')
+parser.add_argument('--label_data_id_field_name', required=False,default='participant_id' ,help='Colname of sample ID (default: participant_id)')
+parser.add_argument('--label_data_label_field_name', required=False, default='high_myopia',help='Colname of sample label (default: label)')
+
+
+args = parser.parse_args()
+
 if __name__ == '__main__':
     train_on_gpu = torch.cuda.is_available()
     print("GPU is available：", train_on_gpu)
     if train_on_gpu:
         print('CUDA is available!')
-        os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+        os.environ["CUDA_LAUNCH_BLOCKING"] = "1" 
         # tensor.to("cuda") = tensor.cuda()
         gpu_device = torch.device("cuda")
         # gpu_device = torch.device("cuda:0")
         gpu_count = torch.cuda.device_count()
-        print("GPU number:", gpu_count)
+        print("GPU numbers:", gpu_count)
         print("CUDA version:", torch.version.cuda)
+        # print("GPU index：", torch.cuda.current_device())
+        # torch.cuda.set_device(gpu_default_device_number)
     else:
         print('CUDA is not available. Training on CPU ...')
-        # CPU
-        # tensor_gpu.to("cpu") = tensor_gpu.cpu()
         cpu_device = torch.device("cpu")
-    main( train_dir_prefix=datetime_now_str(),
-      model_name='SNPImageNet',
-      dataset_dir_path=r"/pub/data/gaoss/New_Multi/code/SuLabCohort/20240918215106/",#"/pub/data/gaoss/New_Multi/code/SuLabCohort/20240914111247/",
-      snp_number= 100760,        #100760    179712
-      batch_size=32,
-      label_data_id_field_name="学籍号",#学籍号  participant_id
-      label_data_label_field_name='high_myopia')#图像和多模态high_myopia，遗传label
+    main( train_dir_prefix=args.train_dir_prefix,
+      model_name=args.model_name,
+      dataset_dir_path=args.dataset_dir_path,#r"C:\Users\76754\Downloads\Multimodal",#"/pub/data/gss/MIRAGE/code/SuLabCohort/20240918215106/",#"/pub/data/gaoss/New_Multi/code/SuLabCohort/20240914111247/",
+      snp_number= args.snp_number,        # college 100760    179712
+      batch_size=args.batch_size,
+      label_data_id_field_name=args.label_data_id_field_name,#学籍号  participant_id
+      label_data_label_field_name=args.label_data_label_field_name)#图像和多模态high_myopia，遗传label
+
 
