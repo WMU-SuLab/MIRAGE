@@ -109,7 +109,7 @@ parser.add_argument('--dataset_dir_path', required=True, help='Input folder of d
 parser.add_argument('--snp_number', required=False,default=None,type=int,help='SNP number for training (default: None)')
 parser.add_argument('--batch_size',required=False,default=32,type=int, help='Batch size (default:32)')
 parser.add_argument('--label_data_id_field_name', required=False,default='participant_id' ,help='Colname of sample ID (default: participant_id)')
-parser.add_argument('--label_data_label_field_name', required=False, default='high_myopia',help='Colname of sample label (default: label)')
+parser.add_argument('--label_data_label_field_name', required=False, default='label',help='Colname of sample label (default: label)')
 
 
 args = parser.parse_args()
