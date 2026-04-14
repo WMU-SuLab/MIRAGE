@@ -16,7 +16,7 @@ The MIRAGE framework requires paired WES (Whole Exome Sequencing) data and fundu
 
 ### Convert WES to one-hot format
 
-An example dataset with a sample size of 12600 for the pipeline used to convert WES plink-format data (.bim, .fam, .bed) into one-hot format  is provided in the folder `plink/example`.
+An example dataset with a sample size of 12600 for the pipeline used to convert WES plink-format data (.bim, .fam, .bed) into one-hot format  is provided in the folder `plink/WES_example`.
 
 ``` r
 ###Convert one-hot from WES plink format files
