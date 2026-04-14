@@ -14,6 +14,24 @@ The MIRAGE framework requires paired WES (Whole Exome Sequencing) data and fundu
 
 ## Tutorials
 
+### Convert WES to one-hot format
+
+An example dataset with a sample size of 12600 for the pipeline used to convert WES plink-format data (.bim, .fam, .bed) into one-hot format  is provided in the folder `plink/example`.
+
+``` r
+###Convert one-hot from WES plink format files
+###Input folder of WES files by "--raw_data_path" and set output folder by "--OneHotSNPs_output_path"
+###Plink files in "plink/WES_example" will convert to 12600 one-hot files
+python ./plink/one-hot.py --raw_data_path "plink/WES_example" \
+--OneHotSNPs_output_path "plink/one-hot_npy" 
+
+###Convert one-hot results from .npy to .csv
+###Input folder of .npy format one-hot files by "--input_dir_path" and set output folder by "--output_dir_path"
+python ./plink/trans_array.py --input_dir_path "plink/one-hot_npy" \
+--output_dir_path_output_path "plink/one-hot_results" 
+
+```
+
 ### Train a MIRAGE model based on test datasets
 
 Example input files are provided in the folder `base_code/example/0108`.
@@ -95,7 +113,7 @@ tpr: 0.6667 | fpr: 0.0000 | KS: 0.8333 | SP: 1.0000
 ### Test results by trained model
 
 Example input files are provided in the folder `base_code/example/0108`. \
-Model trained by example input files will in `"base_code/work_dirs/records/checkpoints/test_training/best_model_checkpoints.pth"`.
+Example model is provided as `"base_code/work_dirs/records/checkpoints/test_training/best_model_checkpoints.pth"`.
 
 #### Arguments
 
@@ -135,7 +153,6 @@ tpr: 0.6667 | fpr: 0.0000 | KS: 0.8333 | SP: 1.0000
 | __--batch_size__ | Batch size for training (default:32). Note: this parameter should be less than the sample size of each used dataset. |
 | __--label_data_id_field_name__ | Column name of sample ID (default: "participant_id"). |
 | __--label_data_label_field_name__ | Column name of sample label (default: "high_myopia", for SNPImageNet and ImageNet). If the training model is set to "SNPNet", then assign it the value "label". |
-
 
 
 
