@@ -183,7 +183,7 @@ def OneHotSNPs(raw_data_path,
         output_folder=  OneHotSNPs_output_path)
 
 parser.add_argument('--raw_data_path', required=False,default="./WES_example", help='Path to raw data folder to be processed (containing data.bed, data.fam,data.bim)')
-parser.add_argument('--OneHotSNPs_output_path', required=False,default="./results", help='Path to save one-hot .npy format results')
+parser.add_argument('--OneHotSNPs_output_path', required=False,default="./one-hot_npy", help='Path to save one-hot .npy format results')
 
 args = parser.parse_args()
 
