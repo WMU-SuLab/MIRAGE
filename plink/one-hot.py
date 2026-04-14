@@ -7,6 +7,7 @@ import numpy as np
 import torch
 from torch.nn.functional import one_hot
 from bed_reader import open_bed
+import argparse
 
 
 def _lines_in_file(file_path: Path) -> int:
@@ -181,12 +182,16 @@ def OneHotSNPs(raw_data_path,
         id_array_generator=sample_id_one_hot_array_generator,
         output_folder=  OneHotSNPs_output_path)
 
+parser.add_argument('--raw_data_path', required=False,default="./WES_example", help='Path to raw data folder to be processed (containing data.bed, data.fam,data.bim)')
+parser.add_argument('--OneHotSNPs_output_path', required=False,default="./results", help='Path to save one-hot .npy format results')
+
+args = parser.parse_args()
 
 if __name__ =="__main__":
-    raw_data_path = r"/pub/data/gaoss/data/MAGIC/no-delect-no-rs/MAGIC_prs/75_HM/test/" # help="Path to raw data folder to be processed (containing data.bed, data.fam,data.bim)
+    raw_data_path = args.raw_data_path 
     extract_snp_output_path = None
     qc_output_path = None
-    OneHotSNPs_output_path = r"/pub/data/gaoss/New_Multi/code/MAGIC_prs_one_hot/75_HM/test-one-hot/"
+    OneHotSNPs_output_path = args.OneHotSNPs_output_path
     output_folder = ""  # help="Folder to save the processed data in."
     qc = False  # help="Whether to do basic QC on plink data (--maf 0.001, --geno 0.03, --mind 0.1). Default: False."
     array_chunk_size = 1000  # help="How many individuals to process at a time. " "Useful to avoid running out of memory.",
