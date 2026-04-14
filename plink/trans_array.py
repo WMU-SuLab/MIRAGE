@@ -4,6 +4,8 @@ import os
 import tqdm
 import resource
 resource.setrlimit(resource.RLIMIT_NOFILE, (8192, 8192))
+import argparse
+
 def convert(npy_file_names,output_dir_path):
     participant_files = {
         participant_id.split(".")[0]: open(os.path.join(output_dir_path, f'{participant_id.split(".")[0]}.csv'), 'w')
@@ -23,9 +25,15 @@ def convert(npy_file_names,output_dir_path):
         participant_file.write(','.join(map(str, one_hot[0])))
         participant_file.close()
 
+parser = argparse.ArgumentParser(description='Trans one-hot results from .npy to .csv')
+parser.add_argument('--input_dir_path', required=True,default="./one-hot_npy", help='Input folder for one-hot .npy results')
+parser.add_argument('--output_dir_path', required=False,default="./one-hot_results", help='Output folder for final one-hot results')
+
+args = parser.parse_args()
+
 if __name__ =="__main__":
-    input_dir_path = r"/pub/data/gaoss/New_Multi/code/MAGIC_prs_one_hot/75_HM/permutation-valid-one-hot/"
-    output_dir_path = r"/pub/data/gaoss/New_Multi/code/MAGIC_prs_20/75_HM/valid/gene/"
+    input_dir_path = args.input_dir_path
+    output_dir_path = args.output_dir_path
     npy_file_names = [file_name for file_name in os.listdir(input_dir_path)]
     print(len(npy_file_names))
     if len(npy_file_names)>8000:
